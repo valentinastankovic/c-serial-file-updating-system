@@ -1,0 +1,9 @@
+#ifndef UTIL_H
+#define UTIL_H
+
+// Sistemski datum i putanje
+extern char globalni_datum[7];
+void inicijalizuj_datum();
+void generisi_putanju(char* buffer, const char* folder, const char* prefiks, const char* ekstenzija); 
+
+#endif 
