@@ -24,28 +24,28 @@ int main(int argc, char* argv[]) {
 
             switch (opcija) {
             case '1':
-                kreiraj_demo_podatke_slucaj1();
+                kreiraj_maticnu_datoteku();
                 kreiraj_transakcionu_datoteku();
                 sumiraj_i_sortiraj_transakcije();
                 printf("Scenario 1 (Osnovni) je pripremljen.\n");
                 break;
             case '2':
-                kreiraj_demo_podatke_slucaj1();
+                kreiraj_maticnu_datoteku();
                 kreiraj_transakcije_scenario2();
                 printf("Scenario 2 (Greska kolicine) je pripremljen.\n");
                 break;
             case '3':
-                kreiraj_demo_podatke_slucaj1();
+                kreiraj_maticnu_datoteku();
                 kreiraj_transakcije_scenario3();
                 printf("Scenario 3 (Novi proizvod) je pripremljen.\n");
                 break;
             case '4':
-                kreiraj_demo_podatke_slucaj1();
+                //kreiraj_demo_podatke_slucaj1();
                 kreiraj_transakcije_scenario4();
                 printf("Scenario 4 (Nepostojeci proizvod) je pripremljen.\n");
                 break;
             case '5':
-                kreiraj_demo_podatke_slucaj1();
+                //kreiraj_demo_podatke_slucaj1();
                 kreiraj_transakcije_scenario5();
                 printf("Scenario 5 (Sveobuhvatno) je pripremljen.\n");
                 break;
