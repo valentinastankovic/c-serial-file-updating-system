@@ -7,32 +7,32 @@
       "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:adts.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\adts.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:adts.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\util.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:util.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\misc.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:misc.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\misc.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:misc.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\defs.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:defs.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\adts.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:adts.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\util.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:util.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\util.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:util.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\misc.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:misc.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\defs.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:defs.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|C:\\Users\\hallo\\source\\repos\\ASD\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{16DF986E-A9DF-40EF-841B-1F190F4239C4}|ASD.vcxproj|solutionrelative:main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,19 +46,19 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "misc.c",
               "DocumentMoniker": "C:\\Users\\hallo\\source\\repos\\ASD\\misc.c",
               "RelativeDocumentMoniker": "misc.c",
               "ToolTip": "C:\\Users\\hallo\\source\\repos\\ASD\\misc.c",
               "RelativeToolTip": "misc.c",
-              "ViewState": "AgIAAFMAAAAAAAAAAADwv2EAAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAmwGwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-01-11T19:36:15.279Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "misc.h",
               "DocumentMoniker": "C:\\Users\\hallo\\source\\repos\\ASD\\misc.h",
               "RelativeDocumentMoniker": "misc.h",
@@ -76,13 +76,13 @@
               "RelativeDocumentMoniker": "util.c",
               "ToolTip": "C:\\Users\\hallo\\source\\repos\\ASD\\util.c",
               "RelativeToolTip": "util.c",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-01-11T19:35:57.378Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 1,
               "Title": "util.h",
               "DocumentMoniker": "C:\\Users\\hallo\\source\\repos\\ASD\\util.h",
               "RelativeDocumentMoniker": "util.h",
@@ -100,44 +100,44 @@
               "RelativeDocumentMoniker": "adts.c",
               "ToolTip": "C:\\Users\\hallo\\source\\repos\\ASD\\adts.c",
               "RelativeToolTip": "adts.c",
-              "ViewState": "AgIAACMDAAAAAAAAAAAmwEADAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAmwNQAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2025-12-22T21:27:08.475Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "adts.h",
               "DocumentMoniker": "C:\\Users\\hallo\\source\\repos\\ASD\\adts.h",
               "RelativeDocumentMoniker": "adts.h",
               "ToolTip": "C:\\Users\\hallo\\source\\repos\\ASD\\adts.h",
               "RelativeToolTip": "adts.h",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAswBgAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAmwDwAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-12-22T21:25:42.44Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "main.c",
               "DocumentMoniker": "C:\\Users\\hallo\\source\\repos\\ASD\\main.c",
               "RelativeDocumentMoniker": "main.c",
               "ToolTip": "C:\\Users\\hallo\\source\\repos\\ASD\\main.c",
               "RelativeToolTip": "main.c",
-              "ViewState": "AgIAABEAAAAAAAAAAAAqwDcAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAmwD4AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2025-12-22T21:18:07.013Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 3,
               "Title": "defs.h",
               "DocumentMoniker": "C:\\Users\\hallo\\source\\repos\\ASD\\defs.h",
               "RelativeDocumentMoniker": "defs.h",
               "ToolTip": "C:\\Users\\hallo\\source\\repos\\ASD\\defs.h",
               "RelativeToolTip": "defs.h",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAkwBcAAAAGAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-12-22T21:15:39.41Z"
             }

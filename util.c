@@ -8,7 +8,7 @@
 #include "util.h"
 
 
-char globalni_datum[7] = "000000";
+char globalni_datum[10] = "000000";
 
 void inicijalizuj_datum() {
     time_t t = time(NULL);

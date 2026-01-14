@@ -45,9 +45,9 @@ int main(int argc, char* argv[]) {
                 printf("Scenario 4 (Nepostojeci proizvod) je pripremljen.\n");
                 break;
             case '5':
-                //kreiraj_demo_podatke_slucaj1();
-                kreiraj_transakcije_scenario5();
-                printf("Scenario 5 (Sveobuhvatno) je pripremljen.\n");
+                popuni_maticnu_demo_osnovni(); // Prvo napuni bazu proizvodima (ID 20, 30, 40...)
+                pripremi_demo_podatke_slucaj_5(); // Ova funkcija koju smo sredili stavlja fajl u DATA
+                printf("Scenario 5 (Sveobuhvatno) je pripremljen u radnom folderu.\n");
                 break;
             default:
                 printf("[Greska] Nepoznat demo scenario: %s\n", argv[1]);

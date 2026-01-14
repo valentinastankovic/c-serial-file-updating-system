@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <direct.h>
 #include <time.h>
 #include "adts.h"
 #include "util.h"
@@ -117,17 +118,38 @@ void kreiraj_transakcionu_datoteku() {
 void sumiraj_i_sortiraj_transakcije() {
     FILE* fs = fopen(".\\DATA\\transakciona.dat", "rb");
     if (!fs) return;
-    int sume[1000] = { 0 }; TRANSAKCIJA t;
-    while (fread(&t, sizeof(TRANSAKCIJA), 1, fs)) sume[t.Id] += (t.Promena * (int)t.Kolicina);
+
+    int sume[1000] = { 0 };
+    int korisceni[1000] = { 0 }; // Pratimo koji su ID-jevi postojali
+    TRANSAKCIJA t;
+
+    while (fread(&t, sizeof(TRANSAKCIJA), 1, fs)) {
+        if (t.Id < 1000) {
+            sume[t.Id] += (t.Promena == ULAZ ? (int)t.Kolicina : -(int)t.Kolicina);
+            korisceni[t.Id] = 1;
+        }
+    }
     fclose(fs);
-    char p[100]; sprintf(p, ".\\DATA\\OLD\\tran_%s.dat", globalni_datum); // Sumarna ide u OLD
+
+    char p[100];
+    sprintf(p, ".\\DATA\\OLD\\tran_%s.dat", globalni_datum);
     FILE* fn = fopen(p, "wb");
-    int ids[] = { 40, 60, 70 };
-    for (int i = 0; i < 3; i++) {
-        TRANSAKCIJA s; s.Id = ids[i];
-        if (sume[ids[i]] >= 0) { s.Promena = ULAZ; s.Kolicina = sume[ids[i]]; }
-        else { s.Promena = IZLAZ; s.Kolicina = -sume[ids[i]]; }
-        fwrite(&s, sizeof(TRANSAKCIJA), 1, fn);
+    if (!fn) return;
+
+    for (int i = 0; i < 1000; i++) {
+        if (korisceni[i]) {
+            TRANSAKCIJA s;
+            s.Id = i;
+            if (sume[i] >= 0) {
+                s.Promena = ULAZ;
+                s.Kolicina = sume[i];
+            }
+            else {
+                s.Promena = IZLAZ;
+                s.Kolicina = -sume[i];
+            }
+            fwrite(&s, sizeof(TRANSAKCIJA), 1, fn);
+        }
     }
     fclose(fn);
     printf("INFO: Sumarna transakciona kreirana u folderu OLD.\n");
@@ -174,12 +196,34 @@ void prikazi_maticnu(char* putanja) {
     fclose(f);
 }
 
-void prikazi_maticnu_id(char* putanja, unsigned id) {
+void prikazi_maticnu_id(char* putanja, unsigned trazeni_id) {
     FILE* f = fopen(putanja, "rb");
-    if (!f) return;
-    PROIZVOD p; int n = 0;
-    while (fread(&p, sizeof(PROIZVOD), 1, f)) if (p.Id == id) { printf("\nID: %u | Naziv: %s | Stanje: %u\n", p.Id, p.Naziv, p.Kolicina); n = 1; break; }
-    if (!n) printf("Nema ga.\n");
+    if (!f) {
+        printf("\nERROR: Maticna datoteka ne postoji.\n");
+        return;
+    }
+
+    PROIZVOD p;
+    int pronadjen = 0;
+
+    // Prolazimo kroz celu datoteku
+    while (fread(&p, sizeof(PROIZVOD), 1, f) == 1) {
+        if (p.Id == trazeni_id) {
+            pronadjen = 1;
+            // Lepo formatiran prikaz jednog proizvoda
+            printf("\n--- PODACI O PROIZVODU ---");
+            printf("\nID:       %u", p.Id);
+            printf("\nNaziv:    %s", p.Naziv);
+            printf("\nKolicina: %u", p.Kolicina);
+            printf("\n--------------------------\n");
+            break; // Nasli smo ga, nema potrebe da citamo dalje
+        }
+    }
+
+    if (!pronadjen) {
+        printf("\nINFO: Proizvod sa ID %u ne postoji u maticnoj datoteci.\n", trazeni_id);
+    }
+
     fclose(f);
 }
 
@@ -446,28 +490,63 @@ void delete_proizvod_maticna() {
 
 // Opcija 6: Update Id
 void azuriraj_jedan_proizvod() {
-    unsigned id, kol; int tip;
-    printf("ID proizvoda za azuriranje: "); scanf("%u", &id);
-    printf("Tip promene (1 za ULAZ, -1 za IZLAZ): "); scanf("%d", &tip);
-    printf("Kolicina: "); scanf("%u", &kol);
-
-    FILE* fs = fopen(".\\DATA\\maticna.dat", "rb");
-    FILE* fn = fopen(".\\DATA\\maticna_nova.dat", "wb");
-    if (!fs || !fn) return;
+    unsigned trazeni_id;
+    char putanja[] = ".\\DATA\\maticna.dat";
+    char putanja_nova[] = ".\\DATA\\maticna_nova.dat";
     PROIZVOD p;
-    while (fread(&p, sizeof(PROIZVOD), 1, fs)) {
-        if (p.Id == id) {
-            if (tip == 1) p.Kolicina += kol;
-            else {
-                if (kol > p.Kolicina) printf("Greska: Nedovoljno na stanju!\n");
-                else p.Kolicina -= kol;
-            }
+    int pronadjen = 0;
+
+    printf("\nID proizvoda za azuriranje: ");
+    if (scanf("%u", &trazeni_id) != 1) {
+        while (getchar() != '\n'); // Ciscenje buffera
+        return;
+    }
+
+    FILE* fs = fopen(putanja, "rb");
+    if (!fs) {
+        printf("ERROR: Maticna datoteka ne postoji.\n");
+        return;
+    }
+
+    FILE* fn = fopen(putanja_nova, "wb");
+    if (!fn) {
+        printf("ERROR: Neuspešno kreiranje pomoæne datoteke.\n");
+        fclose(fs);
+        return;
+    }
+
+    // Prolazimo kroz fajl da naðemo proizvod
+    while (fread(&p, sizeof(PROIZVOD), 1, fs) == 1) {
+        if (p.Id == trazeni_id) {
+            pronadjen = 1;
+            // 1. PRIKAZI PROIZVOD (Obavezno po SRS-u)
+            printf("\n--- PRONADJEN PROIZVOD ---");
+            printf("\nTrenutni naziv: %s", p.Naziv);
+            printf("\nTrenutna kolicina: %u", p.Kolicina);
+            printf("\n--------------------------");
+
+            // 2. PITAJ ZA NOVI NAZIV I NOVU KOLICINU
+            printf("\nUnesite novi naziv: ");
+            scanf("%s", p.Naziv); // ID se ne menja!
+            printf("Unesite novu kolicinu: ");
+            scanf("%u", &p.Kolicina);
         }
+        // Upisujemo u novi fajl (izmenjen ili originalan slog)
         fwrite(&p, sizeof(PROIZVOD), 1, fn);
     }
-    fclose(fs); fclose(fn);
-    remove(".\\DATA\\maticna.dat"); rename(".\\DATA\\maticna_nova.dat", ".\\DATA\\maticna.dat");
-    printf("INFO: Azuriranje zavrseno.\n");
+
+    fclose(fs);
+    fclose(fn);
+
+    if (pronadjen) {
+        remove(putanja);
+        rename(putanja_nova, putanja);
+        printf("\nINFO: Proizvod sa ID %u je uspesno azuriran.\n", trazeni_id);
+    }
+    else {
+        remove(putanja_nova); // Obrisi pomocni fajl jer nista nije menjano
+        printf("\nINFO: Proizvod sa zadatim identifikatorom (%u) ne postoji.\n", trazeni_id);
+    }
 }
 
 void azuriraj_maticnu_osnovni() {
@@ -508,20 +587,26 @@ void pripremi_demo_podatke_slucaj_1() {
     if (f) { fwrite(t, sizeof(TRANSAKCIJA), 14, f); fclose(f); }
 }
 
-// Pomocna funkcija za kopiranje binarnih fajlova
 void kopiraj_fajl(const char* izvor, const char* odrediste) {
     FILE* src = fopen(izvor, "rb");
-    FILE* dst = fopen(odrediste, "wb");
-    if (!src || !dst) {
-        if (src) fclose(src);
-        if (dst) fclose(dst);
+    if (!src) {
+        printf("[GRESKA] Izvorna datoteka nije pronadjena: %s\n", izvor);
         return;
     }
-    char buffer[1024];
+
+    FILE* dst = fopen(odrediste, "wb");
+    if (!dst) {
+        printf("[GRESKA] Ne mogu da kreiram ciljnu datoteku: %s\n", odrediste);
+        fclose(src);
+        return;
+    }
+
+    char buffer[4096];
     size_t n;
     while ((n = fread(buffer, 1, sizeof(buffer), src)) > 0) {
         fwrite(buffer, 1, n, dst);
     }
+
     fclose(src);
     fclose(dst);
 }
@@ -740,98 +825,142 @@ void azuriraj_maticnu_scenario4() {
 }
 
 void pripremi_demo_podatke_slucaj_5() {
-    // Rucno napravi .\DEMO\SLUC_5 folder!
-    FILE* f = fopen(".\\DEMO\\SLUC_5\\transakciona.dat", "wb");
-    if (!f) return;
+    // 1. Priprema maticne - koristimo "DEMO/maticna.dat" umesto ".\\DEMO\\"
+    FILE* fm = fopen("DEMO/maticna.dat", "wb");
+    if (!fm) {
+        printf("[GRESKA] Ne mogu da otvorim DEMO/maticna.dat. Proveri da li folder DEMO postoji!\n");
+    }
+    else {
+        PROIZVOD pm[] = {
+            {20,"Pro_20",100}, {30,"Pro_30",150}, {40,"Pro_40",200},
+            {50,"Pro_50",250}, {60,"Pro_60",300}, {70,"Pro_70",350},
+            {80,"Pro_80",400}, {90,"Pro_90",450}
+        };
+        fwrite(pm, sizeof(PROIZVOD), 8, fm);
+        fclose(fm);
+    }
+
+    // 2. Priprema transakcija u podfolderu SLUC_5
+    // Izbacujemo tacku i dupla kosa crta ide u obicnu kosu crtu /
+    FILE* f = fopen("DEMO/SLUC_5/transakciona.dat", "wb");
+    if (!f) {
+        printf("[GRESKA] Ne mogu da kreiram fajl u DEMO/SLUC_5/. Proveri da li folderi postoje!\n");
+        return;
+    }
+
     TRANSAKCIJA t[] = {
-        {15, ULAZ, 150}, {20, ULAZ, 100}, {22, IZLAZ, 175},
-        {35, ULAZ, 150}, {50, IZLAZ, 800}, {60, IZLAZ, 800},
-        {70, ULAZ, 100}, {90, IZLAZ, 450}, {92, IZLAZ, 175}
+        {15, ULAZ, 150},  // Nov (ide u RPT)
+        {20, ULAZ, 100},  // Update
+        {22, IZLAZ, 175}, // Greska (ide u ERR_PRO)
+        {35, ULAZ, 150},  // Nov (ide u RPT)
+        {50, IZLAZ, 800}, // Greska (ide u ERR_KOL)
+        {60, IZLAZ, 800}, // Greska (ide u ERR_KOL)
+        {70, ULAZ, 100},  // Update
+        {90, IZLAZ, 450}, // Update
+        {92, IZLAZ, 175}  // Greska (ide u ERR_PRO)
     };
+
     fwrite(t, sizeof(TRANSAKCIJA), 9, f);
     fclose(f);
+
+    printf("[OK] Demo podaci za Case 5 su uspesno pripremljeni u folderu DEMO.\n");
 }
 
 void azuriraj_maticnu_sveobuhvatno() {
-    char p_ek[100], p_ep[100], p_nv[100];
+    char p_ek[150], p_ep[150], p_nv[150];
+
+    // Standardizovane Windows putanje
     sprintf(p_ek, ".\\ERR\\err_kol_%s.rpt", globalni_datum);
     sprintf(p_ep, ".\\ERR\\err_pro_%s.rpt", globalni_datum);
     sprintf(p_nv, ".\\RPT\\nov_pro_%s.rpt", globalni_datum);
+
+    // Inicijalizacija fajlova sa zaglavljem
+    FILE* f_init;
+    f_init = fopen(p_nv, "w");
+    if (f_init) { fprintf(f_init, "--- IZVESTAJ O NOVIM PROIZVODIMA (%s) ---\n", globalni_datum); fclose(f_init); }
+    f_init = fopen(p_ek, "w");
+    if (f_init) { fprintf(f_init, "--- GRESKE KOLICINE (%s) ---\n", globalni_datum); fclose(f_init); }
+    f_init = fopen(p_ep, "w");
+    if (f_init) { fprintf(f_init, "--- NEPOSTOJECI PROIZVODI (%s) ---\n", globalni_datum); fclose(f_init); }
 
     FILE* fs = fopen(".\\DATA\\maticna.dat", "rb");
     FILE* ft = fopen(".\\DATA\\transakciona.dat", "rb");
     FILE* fn = fopen(".\\DATA\\maticna_nova.dat", "wb");
 
-    // Otvaramo izvestaje u "w" modu
-    FILE* fek = fopen(p_ek, "w");
-    FILE* fep = fopen(p_ep, "w");
-    FILE* fnv = fopen(p_nv, "w");
-
-    if (!fs || !ft || !fn || !fnv) {
-        printf("[GRESKA] Ne mogu da otvorim datoteke. Proverite foldere DATA, ERR i RPT!\n");
+    if (!fs || !ft || !fn) {
+        printf("\n[GRESKA] Ne mogu da otvorim binarne datoteke u DATA folderu!\n");
+        if (fs) fclose(fs); if (ft) fclose(ft); if (fn) fclose(fn);
         return;
     }
 
-    PROIZVOD p; TRANSAKCIJA t;
+    PROIZVOD p;
+    TRANSAKCIJA t;
     int ima_s = (fread(&p, sizeof(PROIZVOD), 1, fs) == 1);
     int ima_t = (fread(&t, sizeof(TRANSAKCIJA), 1, ft) == 1);
 
-    printf("\n--- POCETAK OBRADE (DEBUG KONZOLA) ---\n");
-
     while (ima_s || ima_t) {
-        // SLUCAJ 1: NOV PROIZVOD ILI NEPOSTOJECI (T.Id je manji ili nema vise Mastera)
+        // SCENARIO: Novi proizvod (Transakcija ima manji ID)
         if (ima_t && (!ima_s || t.Id < p.Id)) {
-            printf("[LOG] Obrada Transakcije ID %u: ", t.Id);
+            if (t.Promena == ULAZ) {
+                PROIZVOD novi;
+                novi.Id = t.Id;
+                novi.Kolicina = t.Kolicina;
+                sprintf(novi.Naziv, "Pro_%u", t.Id);
+                fwrite(&novi, sizeof(PROIZVOD), 1, fn);
 
-            if (t.Promena == ULAZ) { // ULAZ je 1
-                printf("Detektovan NOV PROIZVOD (ULAZ). Pisem u izvestaj...\n");
-
-                PROIZVOD n;
-                n.Id = t.Id;
-                n.Kolicina = t.Kolicina;
-                sprintf(n.Naziv, "Pro_%u", t.Id);
-                fwrite(&n, sizeof(PROIZVOD), 1, fn);
-
-                // PISANJE U FAJL
-                fprintf(fnv, "NOVI PROIZVOD: ID %u | Naziv: %s | Kolicina: %u\n", n.Id, n.Naziv, n.Kolicina);
+                // UPIS U RPT - Otvaramo i odmah zatvaramo da osiguramo upis na disk
+                FILE* frpt = fopen(p_nv, "a");
+                if (frpt) {
+                    fprintf(frpt, "ID: %-4u | Naziv: %-15s | Primljeno: %u\n", novi.Id, novi.Naziv, novi.Kolicina);
+                    fclose(frpt);
+                    printf(" -> [RPT] Zapisan nov proizvod: ID %u\n", t.Id);
+                }
+                else {
+                    printf(" -> [GRESKA] Neuspelo otvaranje RPT fajla za ID %u\n", t.Id);
+                }
             }
             else {
-                printf("Detektovan NEPOSTOJECI PROIZVOD (IZLAZ). Pisem u greske...\n");
-                fprintf(fep, "GRESKA: Proizvod %u ne postoji, a trazen je IZLAZ.\n", t.Id);
+                FILE* ferr = fopen(p_ep, "a");
+                if (ferr) {
+                    fprintf(ferr, "GRESKA: Pokusaj izdavanja nepostojeceg ID %u\n", t.Id);
+                    fclose(ferr);
+                    printf(" -> [ERR] Nepostojeci ID %u\n", t.Id);
+                }
             }
             ima_t = (fread(&t, sizeof(TRANSAKCIJA), 1, ft) == 1);
         }
-        // SLUCAJ 2: PREPISIVANJE STAROG BEZ PROMENA
+        // SCENARIO: Prepisivanje (Samo u maticnoj)
         else if (ima_s && (!ima_t || p.Id < t.Id)) {
             fwrite(&p, sizeof(PROIZVOD), 1, fn);
             ima_s = (fread(&p, sizeof(PROIZVOD), 1, fs) == 1);
         }
-        // SLUCAJ 3: POKLAPANJE (AZURIRANJE)
-        else {
-            printf("[LOG] Azuriranje postojeceg ID %u\n", p.Id);
-            if (t.Promena == IZLAZ && t.Kolicina > p.Kolicina) {
-                fprintf(fek, "GRESKA: ID %u nedovoljno na stanju (%u < %u)\n", p.Id, p.Kolicina, t.Kolicina);
-            }
-            else {
-                if (t.Promena == ULAZ) p.Kolicina += t.Kolicina;
-                else p.Kolicina -= t.Kolicina;
+        // SCENARIO: Podudaranje (Azuriranje postojeceg)
+        else if (ima_s && ima_t && p.Id == t.Id) {
+            while (ima_t && t.Id == p.Id) {
+                if (t.Promena == IZLAZ && t.Kolicina > p.Kolicina) {
+                    FILE* fkol = fopen(p_ek, "a");
+                    if (fkol) {
+                        fprintf(fkol, "ID %u | Stanje: %u | Trazeno: %u\n", p.Id, p.Kolicina, t.Kolicina);
+                        fclose(fkol);
+                        printf(" -> [ERR] Nedovoljno stanja za ID %u\n", p.Id);
+                    }
+                }
+                else {
+                    if (t.Promena == ULAZ) p.Kolicina += t.Kolicina;
+                    else p.Kolicina -= t.Kolicina;
+                }
+                ima_t = (fread(&t, sizeof(TRANSAKCIJA), 1, ft) == 1);
             }
             fwrite(&p, sizeof(PROIZVOD), 1, fn);
             ima_s = (fread(&p, sizeof(PROIZVOD), 1, fs) == 1);
-            ima_t = (fread(&t, sizeof(TRANSAKCIJA), 1, ft) == 1);
         }
     }
 
-    // OBAVEZNO ZATVARANJE PRE PRIKAZA NA EKRANU
     fclose(fs); fclose(ft); fclose(fn);
-    fclose(fek); fclose(fep); fclose(fnv);
-
     remove(".\\DATA\\maticna.dat");
     rename(".\\DATA\\maticna_nova.dat", ".\\DATA\\maticna.dat");
-
-    printf("--- KRAJ OBRADE ---\n");
+    printf("\n--- AZURIRANJE ZAVRSENO ---\n");
 }
-
 void kreiraj_transakcije_scenario5() {
     char p[100]; sprintf(p, ".\\DATA\\OLD\\tran_%s.dat", globalni_datum);
     FILE* f = fopen(p, "wb");
@@ -1000,7 +1129,7 @@ void meni_demo() {
             system("pause");
 
             // 3. Sumiranje (opciono, ali dobro radi preglednosti)
-            sumiraj_i_sortiraj_transakcije();
+            //sumiraj_i_sortiraj_transakcije();
 
             // 4. Azuriranje (Merge logika koja dodaje nove slogove)
             azuriraj_maticnu_scenario3();
@@ -1041,28 +1170,33 @@ void meni_demo() {
         case 5:
             prikazi_objasnjenje_scenario5();
 
-            // 1. Priprema i kopiranje
+            // 1. Priprema svezih demo podataka
             pripremi_demo_podatke_slucaj_5();
-            kopiraj_fajl(".\\DEMO\\maticna.dat", ".\\DATA\\maticna.dat");
-            kopiraj_fajl(".\\DEMO\\SLUC_5\\transakciona.dat", ".\\DATA\\transakciona.dat");
+
+            // 2. Kopiranje u radni folder (Koristimo / putanje)
+            kopiraj_fajl("DEMO/maticna.dat", "DATA/maticna.dat");
+            kopiraj_fajl("DEMO/SLUC_5/transakciona.dat", "DATA/transakciona.dat");
 
             printf("\n--- 1. STARA MATICNA DATOTEKA ---");
-            prikazi_maticnu(".\\DATA\\maticna.dat");
+            prikazi_maticnu("DATA/maticna.dat");
             system("pause");
 
             printf("\n--- 2. TRANSAKCIONA DATOTEKA (Kombinovano) ---");
-            prikazi_transakcije(".\\DATA\\transakciona.dat");
+            prikazi_transakcije("DATA/transakciona.dat");
             system("pause");
 
-            // 3. Glavna logika azuriranja
+            // 3. Izvrsavanje azuriranja
             azuriraj_maticnu_sveobuhvatno();
 
-            printf("\n--- 3. NOVA MATICNA DATOTEKA (Nakon svih promena) ---");
-            prikazi_maticnu(".\\DATA\\maticna.dat");
+            printf("\n--- 3. NOVA MATICNA DATOTEKA ---");
+            prikazi_maticnu("DATA/maticna.dat");
 
-            printf("\n--- 4. IZVESTAJI O GRESKAMA I PROMENAMA ---");
-            printf("\nProverite foldere RPT i ERR za detaljne izvestaje.");
-            printf("\n[OK] Scenario 5 zavrsen.\n");
+            // 4. AUTOMATSKI PRIKAZ IZVESTAJA
+            printf("\n\n--- 4. PROVERA GENERISANOG IZVESTAJA (RPT) ---");
+            char putanja_za_prikaz[150]; // Jedna promenljiva za sve
+            sprintf(putanja_za_prikaz, "RPT/nov_pro_%s.rpt", globalni_datum);
+            prikazi_tekstualni_izvestaj(putanja_za_prikaz);
+
             system("pause");
             break;
         case 0:
@@ -1202,26 +1336,52 @@ void meni_maticna() {
         case 5: {
             int sc;
             printf("\nIzaberite scenario azuriranja:");
-            printf("\n1.Osnovni 2.Greska_kol 3.Novi_pro 4.Nepostojeci 5.Sveobuhvatno\nIzbor: ");
-            scanf("%d", &sc);
-            char putanja_rpt[100];
+            printf("\n1.Osnovni 2.Greska_kol 3.Novi_pro 4.Nepostojeci 5.Sveobuhvatno");
+            printf("\nIzbor: ");
+            if (scanf("%d", &sc) != 1) {
+                while (getchar() != '\n');
+                break;
+            }
 
             if (sc == 5) {
+                // --- LOGIKA SA STRANE 15 SPECIFIKACIJE ---
+                FILE* provera_m = fopen("DATA/maticna.dat", "rb");
+                if (provera_m == NULL) {
+                    printf("INFO: Maticna datoteka ne postoji. Kopiram iz DEMO (SRS str. 15)...\n");
+                    kopiraj_fajl("DEMO/maticna.dat", "DATA/maticna.dat");
+                }
+                else {
+                    fclose(provera_m);
+                }
+
+                FILE* provera_t = fopen("DATA/transakciona.dat", "rb");
+                if (provera_t == NULL) {
+                    printf("INFO: Transakciona datoteka ne postoji. Kopiram iz DEMO/SLUC_5 (SRS str. 15)...\n");
+                    kopiraj_fajl("DEMO/SLUC_5/transakciona.dat", "DATA/transakciona.dat");
+                }
+                else {
+                    fclose(provera_t);
+                }
+                // ------------------------------------------
+
                 azuriraj_maticnu_sveobuhvatno();
 
-                // Prikaz gresaka kolicine
-                sprintf(putanja_rpt, ".\\ERR\\err_kol_%s.rpt", globalni_datum);
-                prikazi_tekstualni_izvestaj(putanja_rpt);
+                printf("\n--- PRIKAZ GENERISANIH IZVESTAJA ---");
+                char p_rpt[150];
 
-                // Prikaz nepostojecih proizvoda
-                sprintf(putanja_rpt, ".\\ERR\\err_pro_%s.rpt", globalni_datum);
-                prikazi_tekstualni_izvestaj(putanja_rpt);
+                printf("\n--- GRESKE KOLICINE ---");
+                sprintf(p_rpt, "ERR/err_kol_%s.rpt", globalni_datum);
+                prikazi_tekstualni_izvestaj(p_rpt);
 
-                // Prikaz NOVIH proizvoda (Ovo ti je falilo ili bilo prazno)
-                sprintf(putanja_rpt, ".\\RPT\\nov_pro_%s.rpt", globalni_datum);
-                prikazi_tekstualni_izvestaj(putanja_rpt);
+                printf("\n--- NEPOSTOJECI PROIZVODI ---");
+                sprintf(p_rpt, "ERR/err_pro_%s.rpt", globalni_datum);
+                prikazi_tekstualni_izvestaj(p_rpt);
+
+                printf("\n--- NOVI PROIZVODI (RPT) ---");
+                sprintf(p_rpt, "RPT/nov_pro_%s.rpt", globalni_datum);
+                prikazi_tekstualni_izvestaj(p_rpt);
             }
-            // ... ostali if-ovi za sc 1, 2, 3, 4 ...
+            // ... ostatak koda
             break;
         }
         case 6:
