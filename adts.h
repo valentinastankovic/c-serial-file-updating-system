@@ -9,25 +9,30 @@
 void arhiviraj_maticnu();
 
 // Maticna datoteka
-void kreiraj_maticnu_datoteku();
-void obrisi_maticnu_datoteku(char* putanja);
-void prikazi_maticnu(char* putanja);
-void prikazi_maticnu_id(char* putanja, unsigned trazeni_id);
-void prikazi_tekstualni_izvestaj(char* putanja);
+void create_maticna();
+void drop_maticna(char* putanja);
+void select_all_maticna(char* putanja);
+void select_id_maticna(char* putanja, unsigned trazeni_id);
+void delete_proizvod_maticna();
+void insert_maticna();
+void update_id_maticna();
+
 
 
 // Transakciona datoteka
-void kreiraj_transakcionu_datoteku();
-void prikazi_transakcije(char* putanja);
-void prikazi_transakcije_id(char* putanja, unsigned trazeni_id);
+void create_transakciona();
+void drop_transakciona(char* putanja);
+void insert_transakciona();
+void select_all_transakciona(char* putanja);
+void select_id_transakciona(char* putanja, unsigned trazeni_id);
 void sumiraj_i_sortiraj_transakcije();
-void dodaj_transakciju();
-void obrisi_transakcionu_datoteku(char* putanja);
+
+
 
 // Proizvodi
-void insert_maticna();
-void delete_proizvod_maticna();
-void azuriraj_jedan_proizvod();
+
+
+
 
 // Scenariji azuriranja
 void azuriraj_maticnu_osnovni();

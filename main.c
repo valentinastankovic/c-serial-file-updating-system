@@ -24,18 +24,18 @@ int main(int argc, char* argv[]) {
 
             switch (opcija) {
             case '1':
-                kreiraj_maticnu_datoteku();
-                kreiraj_transakcionu_datoteku();
+                create_maticna();
+                create_transakciona();
                 sumiraj_i_sortiraj_transakcije();
                 printf("Scenario 1 (Osnovni) je pripremljen.\n");
                 break;
             case '2':
-                kreiraj_maticnu_datoteku();
+                create_maticna();
                 kreiraj_transakcije_scenario2();
                 printf("Scenario 2 (Greska kolicine) je pripremljen.\n");
                 break;
             case '3':
-                kreiraj_maticnu_datoteku();
+                create_maticna();
                 kreiraj_transakcije_scenario3();
                 printf("Scenario 3 (Novi proizvod) je pripremljen.\n");
                 break;

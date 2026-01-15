@@ -17,12 +17,10 @@ void inicijalizuj_datum() {
 }
 
 void generisi_putanju(char* buffer, const char* folder, const char* prefiks, const char* ekstenzija) {
-    // Ako je folder RPT ili ERR, putanja ide direktno iz korena
     if (strcmp(folder, "RPT") == 0 || strcmp(folder, "ERR") == 0) {
         sprintf(buffer, ".\\%s\\%s_%s.%s", folder, prefiks, globalni_datum, ekstenzija);
     }
     else {
-        // Za OLD i ostalo ostaje u DATA
         sprintf(buffer, ".\\DATA\\%s\\%s_%s.%s", folder, prefiks, globalni_datum, ekstenzija);
     }
 }
