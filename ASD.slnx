@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Aplikaciona logika/Aplikaciona logika.vcxproj" Id="b47f9075-d1b6-457d-91cf-9e0dce99e042" />
+  <Project Path="Glavni program/Glavni program.vcxproj" Id="9a0aa29a-684c-4d9b-ab95-e01ef154d7fc" />
+  <Project Path="Korisnicki interfejs/Korisnicki interfejs.vcxproj" Id="3a775867-728f-497b-a36c-09b09208e6eb" />
+  <Project Path="Logicke kontrole/Logicke kontrole.vcxproj" Id="d48b73b5-4b89-4e4b-988c-e0d692e7fd45" />
+  <Project Path="Sloj pristupa podacima/Sloj pristupa podacima.vcxproj" Id="29437128-dccc-4216-b5a3-74f09b9bf231" />
+  <Project Path="Zajednicko/Zajednicko.vcxproj" Id="c5a8cb2b-dfc1-487f-b4c5-c200cbda7a82" />
+</Solution>

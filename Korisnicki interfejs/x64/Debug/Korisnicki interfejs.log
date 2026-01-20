@@ -1,0 +1,7 @@
+﻿  kki.c
+C:\Users\hallo\Desktop\faks\programiranje repozitorijuma podataka\ASD\Korisnicki interfejs\kki.c(216,4): warning C4013: 'pripremi_demo_podatke_slucaj_1' undefined; assuming extern returning int
+C:\Users\hallo\Desktop\faks\programiranje repozitorijuma podataka\ASD\Korisnicki interfejs\kki.c(246,4): warning C4013: 'pripremi_demo_podatke_slucaj_2' undefined; assuming extern returning int
+C:\Users\hallo\Desktop\faks\programiranje repozitorijuma podataka\ASD\Korisnicki interfejs\kki.c(270,4): warning C4013: 'pripremi_demo_podatke_slucaj_3' undefined; assuming extern returning int
+C:\Users\hallo\Desktop\faks\programiranje repozitorijuma podataka\ASD\Korisnicki interfejs\kki.c(293,4): warning C4013: 'pripremi_demo_podatke_slucaj_4' undefined; assuming extern returning int
+C:\Users\hallo\Desktop\faks\programiranje repozitorijuma podataka\ASD\Korisnicki interfejs\kki.c(317,4): warning C4013: 'pripremi_demo_podatke_slucaj_5' undefined; assuming extern returning int
+  Korisnicki interfejs.vcxproj -> C:\Users\hallo\Desktop\faks\programiranje repozitorijuma podataka\ASD\x64\Debug\Korisnicki interfejs.lib
